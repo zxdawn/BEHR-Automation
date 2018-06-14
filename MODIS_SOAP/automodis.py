@@ -30,10 +30,10 @@ def parse_args():
     """
 
     parser = argparse.ArgumentParser(description="program to retrieve modis_urls")
-    parser.add_argument("products", help="modis products to download")
-    parser.add_argument("collection", help="modis collection number to download")
-    parser.add_argument("startTime", help = "begining of time period for modis data YYYY-MM-DD HH:MM:SS")
-    parser.add_argument("endTime", help = "end of time period for modis data YYYY-MM-DD HH:MM:SS")
+    parser.add_argument("--products", help="modis products to download")
+    parser.add_argument("--collection", help="modis collection number to download")
+    parser.add_argument("--startTime", help = "begining of time period for modis data YYYY-MM-DD HH:MM:SS")
+    parser.add_argument("--endTime", help = "end of time period for modis data YYYY-MM-DD HH:MM:SS")
     parser.add_argument("--north", default = default_vals['north'], type = float, help = "north bound for modis data")
     parser.add_argument("--south", default = default_vals['south'], type = float, help = "south bound for modis data")
     parser.add_argument("--east", default = default_vals['east'], type = float, help = "east bound for modis data")
