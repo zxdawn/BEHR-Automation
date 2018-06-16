@@ -1,13 +1,17 @@
 #!/bin/bash
 #
-# This function will contact the MODIS LAADS Web server at https://ladsweb.modaps.eosdis.nasa.gov and
+# This script will contact the MODIS LAADS Web server at https://ladsweb.modaps.eosdis.nasa.gov and
 # identify MYD06 and MCD43D* files from specific months and retrieve them, putting them in the proper directory.
 #
+# This script will also contact GES DISC Web server at https://aura.gesdisc.eosdis.nasa.gov and get OMNO2 and OMPIXCOR files from specific months and retrieve them, putting them in the proper directory.
+# 
 # The MODIS root directory on the file server should be defined in the env. variable MODDIR. (This
 # directory should contain subfolders for the various MODIS products.)
 #
-# Xin Zhang <xinzhang1215@gmail.com> 13 Jun 2018
+# The staging directory of OMI should be defined in the env. variable OMNO2DIR and OMPIXCORDIR
+# 
 # The automodis.py script must be there as well for this to work
+# Xin Zhang <xinzhang1215@gmail.com> 13 Jun 2018
 
 DEBUG=1
 
@@ -23,14 +27,16 @@ then
     exit 1
 fi
 
-# Remote directories have the pattern https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/
-# <collection>/<product>/<year>/<day-of-year>/<data-files>. This is the root
-# remote dir
+# Remote directories of modis* have the pattern https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/
+# <collection>/<product>/<year>/<day-of-year>/<data-files>. This is the root remote dir:
 REMOTEDIR="https://ladsweb.modaps.eosdis.nasa.gov/archive/allData"
 
-## ====================================== ##
-## MCD43D07, MCD43D08, MCD43D09, MCD43D31 ##
-## ====================================== ##
+# Remote directories of omi* have the pattern https://aura.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level2/<product>/<year>/<day-of-year>/<data-files>. This is the root remote dir:
+REMOTEDIR_OMI="https://aura.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level2/"
+
+## ======================================================= ##
+## MCD43D07, MCD43D08, MCD43D09, MCD43D31, OMNO2, OMPIXCOR ##
+## ======================================================= ##
 
 function usage {
   echo "Usage:"
@@ -62,14 +68,34 @@ function recurse {
   for y in `seq ${syear} 1 ${eyear}`
   do
     dest="${MODDIR}/MCD43D/${y}/"
+    dest_omino2="${OMNO2DIR}"
+    dest_omipixcor="${OMPIXCORDIR}"
+
     if [[ ! -d $dest ]]
     then
         echo "Creating $dest"
         mkdir -p $dest
     fi
 
+    if [[ -z $dest_omino2 ]]; then
+        echo "OMINO2 does not have a staging directory set via an environmental variable"
+    elif [[ ! -d $dest_omino2 ]]; then
+        echo "Staging directory $dest_omino2 does not exist. Creating ....."
+        mkdir -p $dest_omino2
+    fi
+
+    if [[ -z $dest_omipixcor ]]; then
+        echo "OMIPIXCOR does not have a staging directory set via an environmental variable"
+    elif [[ ! -d $dest_omipixcor ]]; then
+        echo "Staging directory $dest_omipixcor does not exist, Creating ....."
+        mkdir -p $dest_omipixcor
+    fi
+
     for doy in `seq ${sday} 1 ${eday}`
     do
+## ====================================== ##
+## MCD43D07, MCD43D08, MCD43D09, MCD43D31 ##
+## ====================================== ##
       srcs=(
         "${REMOTEDIR}/6/MCD43D07/${y}/${doy}/"
         "${REMOTEDIR}/6/MCD43D08/${y}/${doy}/"
@@ -92,6 +118,15 @@ function recurse {
           fi
         done
       done
+## =============== ##
+## OMNO2, OMPIXCOR ##
+## =============== ##
+      rm -f "$HOME/.urs_cookies"
+      touch "$HOME/.urs_cookies"
+      cd ${dest_omino2 }
+      wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies --keep-session-cookies -r -c -nH -nd -np -A he5 "${REMOTEDIR_OMI}/OMNO2.003/${y}/${doy}/" 
+      cd ${dest_omipixcor}
+      wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies --keep-session-cookies -r -c -nH -nd -np -A he5 "${REMOTEDIR_OMI}/OMPIXCOR.003/${y}/${doy}/"
     done
   done
 }
@@ -171,7 +206,7 @@ enddate=$(date -d $enddate +'%Y-%m-%d 23:59:59')
 
 echo "Getting MYD06 file list..."
 #filelist=$(python ${scriptdir}/automodis.py --products MYD06_L2 --startTime "$startdate" --endTime "$enddate" --dayNightBoth 'DB')
-python ${scriptdir}/MODIS_SOAP/automodis.py --product "MYD06_L2" --collection "61" --startTime "${startdate}" --endTime "${enddate}" --output-file "${MODDIR}/MYD06_L2/modis_urls.txt"
+/nuist/u/home/yinyan/xin/work/anaconda3/envs/modis/bin/python ${scriptdir}/MODIS_SOAP/automodis.py --product "MYD06_L2" --collection "61" --startTime "${startdate}" --endTime "${enddate}" --output-file "${MODDIR}/MYD06_L2/modis_urls.txt"
 echo "Done."
 filelist=$(cat ${MODDIR}/MYD06_L2/modis_urls.txt)
 for f in $filelist
