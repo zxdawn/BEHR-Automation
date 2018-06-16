@@ -171,7 +171,7 @@ enddate=$(date -d $enddate +'%Y-%m-%d 23:59:59')
 
 echo "Getting MYD06 file list..."
 #filelist=$(python ${scriptdir}/automodis.py --products MYD06_L2 --startTime "$startdate" --endTime "$enddate" --dayNightBoth 'DB')
-python ${scriptdir}/MODIS_SOAP/automodis.py --product 'MYD06_L2' --collection '61' --startTime '$startdate' --endTime '$enddate'
+python ${scriptdir}/MODIS_SOAP/automodis.py --product "MYD06_L2" --collection "61" --startTime "${startdate}" --endTime "${enddate}" --output-file "${MODDIR}/MYD06_L2/modis_urls.txt"
 echo "Done."
 filelist=$(cat ${MODDIR}/MYD06_L2/modis_urls.txt)
 for f in $filelist
