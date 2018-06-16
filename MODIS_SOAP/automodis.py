@@ -12,7 +12,7 @@ import sys
 import time
 import pdb
 
-default_vals = {'north': 55.0, 'south': 20.0, 'east': -65.0, 'west': -125.0,
+default_vals = {'north': 60.0, 'south': 0.0, 'east': -55.0, 'west': -140.0,
                 'coordsOrTiles': 'coords', 'dayNightBoth': 'DNB'}
 
 
@@ -111,7 +111,7 @@ def get_modis(products, collection, startTime, endTime, north=default_vals['nort
     # Write the URLs to a text file in the directory defined by the MATRUNDIR environmental
     # variable
     if output_file is not None:
-        write_urls(fileURLs)
+        write_urls(fileURLs,output_file)
     else:
         return fileURLs
 
