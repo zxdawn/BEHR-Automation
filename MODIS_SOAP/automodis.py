@@ -30,10 +30,10 @@ def parse_args():
     """
 
     parser = argparse.ArgumentParser(description="program to retrieve modis_urls")
-    parser.add_argument("--products", help="modis products to download")
-    parser.add_argument("--collection", help="modis collection number to download")
-    parser.add_argument("--startTime", help = "begining of time period for modis data YYYY-MM-DD HH:MM:SS")
-    parser.add_argument("--endTime", help = "end of time period for modis data YYYY-MM-DD HH:MM:SS")
+    parser.add_argument("products", help="modis products to download")
+    parser.add_argument("collection", help="modis collection number to download")
+    parser.add_argument("startTime", help = "begining of time period for modis data YYYY-MM-DD HH:MM:SS")
+    parser.add_argument("endTime", help = "end of time period for modis data YYYY-MM-DD HH:MM:SS")
     parser.add_argument("--north", default = default_vals['north'], type = float, help = "north bound for modis data")
     parser.add_argument("--south", default = default_vals['south'], type = float, help = "south bound for modis data")
     parser.add_argument("--east", default = default_vals['east'], type = float, help = "east bound for modis data")
@@ -111,7 +111,7 @@ def get_modis(products, collection, startTime, endTime, north=default_vals['nort
     # Write the URLs to a text file in the directory defined by the MATRUNDIR environmental
     # variable
     if output_file is not None:
-        write_urls(fileURLs,output_file)
+        write_urls(fileURLs, output_file)
     else:
         return fileURLs
 
