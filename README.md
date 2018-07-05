@@ -12,47 +12,55 @@ Download MCD43D07, MCD43D08, MCD43D09, MCD43D31, MYD06, OMNO2 ans OMPIXCOR
 
    `pip install SOAPpy`
 
-3. Directory structure:
+3. requests
 
-   ```
-   export MODDIR='xxxxxxxxxxx/MODIS/'
-   export OMNO2DIR='xxxxxxxxxxx/OMNO2/version_3_3_0'
-   export OMPIXCORDIR='xxxxxxxxxxx/OMPIXCOR/version_3_3_0'
-   ```
+   `conda install -c anaconda requests`
 
-   ```
-   ├── MODIS
-   │   ├── Land_Water_Mask_7Classes_UMD.hdf
-   │   ├── MCD43D
-   │   │   └── yyyy_1
-   │   │   └── yyyy_2
-   │   └── MYD06_L2
-   │       └── yyyy_1
-   │       └── yyyy_2
-   ├── OMI
-   │   ├── OMNO2
-   │   │   └── version_3_3_0
-   │   │       ├── yyyy_1
-   │   │       │   └── mm_1
-   │   └── OMPIXCOR
-   │       └── version_003
-   │           ├── yyyy_1
-   │           │   └── mm_1
-   ```
+4. beautifulsoup4
 
+   `conda install -c anaconda beautifulsoup4`
+
+## Directory structure
+
+```
+export MODDIR='xxxxxxxxxxx/MODIS/'
+export OMNO2DIR='xxxxxxxxxxx/OMNO2/version_3_3_0'
+export OMPIXCORDIR='xxxxxxxxxxx/OMPIXCOR/version_003'
+```
+
+```
+├── MODIS
+│   ├── Land_Water_Mask_7Classes_UMD.hdf
+│   ├── MCD43D
+│   │   └── yyyy_1
+│   │   └── yyyy_2
+│   └── MYD06_L2
+│       └── yyyy_1
+│       └── yyyy_2
+├── OMI
+│   ├── OMNO2
+│   │   └── version_3_3_0
+│   │       ├── yyyy_1
+│   │       │   └── mm_1
+│   └── OMPIXCOR
+│       └── version_003
+│           ├── yyyy_1
+│           │   └── mm_1
+```
 ## Usage
 
 **Arguments:**
 
+```
 -s|--startdate
 
-​	yyyy-mm-dd;
+	yyyy-mm-dd;
 
 -e|--enddate
 
-​	yyyy-mm-dd;
+	yyyy-mm-dd;
 
-**Parameters:**
+```
 
 You need to change `USERNAME` and `PASSWORD ` in `get_omi.py`
 
