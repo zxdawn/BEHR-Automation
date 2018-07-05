@@ -32,7 +32,7 @@ def loop_year(products, startTime, endTime):
 
     for y in np.arange(syear, eyear+1, 1):
         for m in np.arange(sday, eday+1, 1):
-            htmls.append(base_url+'/'+products+'/'+str(y)+'/'+str(m)+'/')
+            htmls.append(base_url+'/'+products+'/'+str(y)+'/'+str(m).zfill(3)+'/')
 
     return htmls
 
@@ -116,8 +116,8 @@ def download_product(product, path, start_date, end_date, verbose=0):
 def driver(start_date, end_date, verbose=0):
     omno2_dir = os.getenv('OMNO2DIR')
     ompixcor_dir = os.getenv('OMPIXCORDIR')
-    products = [('OMNO2.003', omno2_dir),
-                    ('OMPIXCOR.003',ompixcor_dir)]
+
+    products = [('OMNO2.003', omno2_dir), ('OMPIXCOR.003',ompixcor_dir)]
     for product, path in products:
         if verbose > 0:
             print('Now downloading the {} product'.format(product))
