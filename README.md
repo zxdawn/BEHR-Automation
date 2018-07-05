@@ -59,6 +59,6 @@ You need to change `USERNAME` and `PASSWORD ` in `get_omi.py`
 **Example:**
 
 ```
-python get_modis.py -s 20140401 -e 20140430 -v
-python get_omi.py -s 20140401 -e 20140430 -v
+python get_modis.py -s 2014-04-01 -e 2014-04-30 -v
+python get_omi.py -s 2014-04-01 -e 2014-04-30 -v
 ```
