@@ -44,14 +44,17 @@ def get_url(products, startTime, endTime):
     htmls = loop_year(products, startTime, endTime)
 
     for html in htmls:
+        tmp_names = []
         html_page = urllib2.urlopen(html)
         soup = BeautifulSoup(html_page, "html.parser")
         # Filter links and save to list
         for link in soup.findAll('a'):
             link = link.get('href')
             if link.endswith('he5'):
-                names.append(link)
-                urls.append(html)
+                tmp_names.append(link)
+        tmp_names = list(set(tmp_names))
+        names.extend(tmp_names)
+        urls += ([html]*len(tmp_names))
 
     return names, urls
 
@@ -89,18 +92,20 @@ def list_product_urls(product, path, start_date, end_date):
 
 def download_product(product, path, start_date, end_date, verbose=0):
     names, urls = list_product_urls(product, path, start_date, end_date)
+
     for counter, name in enumerate (names):
-        year_str = name[18:22]
+        year_str = name.split("_")[2][:4]
         year_directory = os.path.join(path, year_str)
         if not os.path.isdir(year_directory):
             os.mkdir(year_directory)
 
-        month_str = name[23:25]
+        month_str = name.split("_")[2][5:7]
         month_directory = os.path.join(year_directory, month_str)
         if not os.path.isdir(month_directory):
             os.mkdir(month_directory)
 
         file_fullname = os.path.join(month_directory, name)
+
         if os.path.isfile(file_fullname) and os.path.getsize(file_fullname) > 0:
             if verbose > 1:
                 print('File {} already exists and size is > 0; not re-downloaded'.format(file_fullname))
